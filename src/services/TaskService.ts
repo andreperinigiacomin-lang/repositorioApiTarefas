@@ -30,6 +30,14 @@ class TaskService{
         }
         return task;
     }
+    delete(id: number): boolean {
+        const index = this.tasks.findIndex(task => task.id === id);
+        if(index === -1){ //se nao acha, retorna -1
+            return false;
+        }
+        this.tasks.splice(index, 1);
+        return true;
+    }
 }
 
 export default new TaskService();
