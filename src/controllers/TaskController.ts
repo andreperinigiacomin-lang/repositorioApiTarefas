@@ -19,9 +19,21 @@ class TaskController{
         if(!task){
             res.status(404).json({
                 message: "Task não encontrada"});
-            return
+            return;
         }
         res.status(200).json(task);
+    }
+
+    update(res: Response, req: Request): void{
+        const id = Number(req.params.id)
+        const {title, completed} = req.body;
+        const updatedTask = TaskService.update(id, title, completed);
+        if(!updatedTask){
+            res.status(404).json({
+                message: "Task não encontrada"});
+                return;
+        }
+        res.status(200).json(updatedTask);
     }
 
 }
