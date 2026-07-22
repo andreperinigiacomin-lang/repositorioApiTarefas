@@ -2,6 +2,7 @@ import { Task } from "../types/Task";
 
 class TaskService{
     tasks: Task[] = [];
+    
     create(title: string): Task {
         const task: Task = {
             id: Math.floor(Math.random() * 1000000),
@@ -11,12 +12,15 @@ class TaskService{
         this.tasks.push(task);
         return task;
     }
+
     findAll(): Task[]{
         return this.tasks;
     }
+
     findById(id: number): Task | undefined {
         return this.tasks.find(task => task.id === id);
     }
+
     update(id: number, title?: string, completed?: boolean): Task | undefined {
         const task = this.findById(id);
         if(!task){
@@ -30,6 +34,7 @@ class TaskService{
         }
         return task;
     }
+
     delete(id: number): boolean {
         const index = this.tasks.findIndex(task => task.id === id);
         if(index === -1){ //se nao acha, retorna -1
