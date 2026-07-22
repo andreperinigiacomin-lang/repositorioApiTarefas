@@ -17,6 +17,19 @@ class TaskService{
     findById(id: number): Task | undefined {
         return this.tasks.find(task => task.id === id);
     }
+    update(id: number, title?: string, completed?: boolean): Task | undefined {
+        const task = this.findById(id);
+        if(!task){
+            return undefined;
+        }
+        if(title !== undefined){
+            task.title = title;
+        }
+        if(completed !== undefined){
+            task.completed = completed;
+        }
+        return task;
+    }
 }
 
 export default new TaskService();
