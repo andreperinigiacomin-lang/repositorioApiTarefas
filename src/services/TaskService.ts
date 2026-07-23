@@ -13,8 +13,12 @@ class TaskService{
         return task;
     }
 
-    findAll(): Task[]{
-        return this.tasks;
+    findAll(completed?:string){
+        if(completed === undefined){
+            return this.tasks;
+        }
+        const isCompleted = completed === "true";
+        return this.tasks.filter(task => task.completed === isCompleted);
     }
 
     findById(id: number): Task | undefined {

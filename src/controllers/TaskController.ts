@@ -3,13 +3,14 @@ import TaskService from '../services/TaskService';
 
 class TaskController{
     create(res:Response, req: Request): void{
-        const {title} = req.body();
+        const {title} = req.body;
         const task = TaskService.create(title)
         res.status(201).json(task);
     }
 
     findAll(res: Response, req: Request): void{
-        const tasks = TaskService.findAll();
+        const completed = req.query.completed as string | undefined;
+        const tasks = TaskService.findAll(completed);
         res.status(200).json(tasks);
     }
 
