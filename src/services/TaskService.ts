@@ -24,22 +24,28 @@ class TaskService{
         });
     }
 
-    findById(id: number): Task | undefined {
-        return this.tasks.find(task => task.id === id);
+    async findById(id: number) {
+        return await prisma.task.findUnique({
+            where: {
+                id,
+            },
+        });
     }
 
-    update(id: number, title?: string, completed?: boolean): Task | undefined {
-        const task = this.findById(id);
+     async update(id: number, title?: string, completed?: boolean){
+        const task = await this.findById(id);
         if(!task){
-            return undefined;
+            return null;
         }
-        if(title !== undefined){
-            task.title = title;
-        }
-        if(completed !== undefined){
-            task.completed = completed;
-        }
-        return task;
+        return await prisma.task.update({
+            where: {
+                id,
+            },
+            data: {
+                ...(title !== undefined && {title}),
+                ...(completed !== undefined && {completed}),
+            },
+        });
     }
 
     delete(id: number): boolean {
