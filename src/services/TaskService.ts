@@ -48,12 +48,16 @@ class TaskService{
         });
     }
 
-    delete(id: number): boolean {
-        const index = this.tasks.findIndex(task => task.id === id);
-        if(index === -1){ //se nao acha, retorna -1
+    async delete(id: number): Promise<Boolean>{
+        const task = await this.findById(id);
+        if(!task){
             return false;
         }
-        this.tasks.splice(index, 1);
+        await prisma.task.delete({
+            where: {
+                id,
+            },
+        });
         return true;
     }
 }
