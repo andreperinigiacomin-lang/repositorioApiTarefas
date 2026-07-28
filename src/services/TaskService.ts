@@ -1,4 +1,3 @@
-import { Task } from "../types/Task";
 import { prisma } from "../config/prismaClient";
 
 class TaskService{
