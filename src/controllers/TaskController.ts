@@ -8,15 +8,15 @@ class TaskController{
         res.status(201).json(task);
     }
 
-    findAll(req: Request, res: Response): void{
+    async findAll(req: Request, res: Response): Promise<void>{
         const completed = req.query.completed as string | undefined;
-        const tasks = TaskService.findAll(completed);
+        const tasks = await TaskService.findAll(completed);
         res.status(200).json(tasks);
     }
 
-    findById(req: Request, res: Response): void{
+    async findById(req: Request, res: Response): Promise<void>{
         const id = Number(req.params.id);
-        const task = TaskService.findById(id);
+        const task = await TaskService.findById(id);
         if(!task){
             res.status(404).json({
                 message: "Task não encontrada"});
@@ -25,10 +25,10 @@ class TaskController{
         res.status(200).json(task);
     }
 
-    update(req: Request, res: Response): void{
+    async update(req: Request, res: Response): Promise<void>{
         const id = Number(req.params.id);
         const {title, completed} = req.body;
-        const updatedTask = TaskService.update(id, title, completed);
+        const updatedTask = await TaskService.update(id, title, completed);
         if(!updatedTask){
             res.status(404).json({
                 message: "Task não encontrada"});
@@ -37,9 +37,9 @@ class TaskController{
         res.status(200).json(updatedTask);
     }
 
-    delete(req: Request,res: Response, ): void{
+    async delete(req: Request,res: Response, ): Promise<void>{
         const id = Number(req.params.id);
-        const deleted = TaskService.delete(id);
+        const deleted = await TaskService.delete(id);
         if(!deleted){
             res.status(404).json({
                 message: "Task não encontrada"
