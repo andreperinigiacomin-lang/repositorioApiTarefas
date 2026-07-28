@@ -1,24 +1,27 @@
 import { Task } from "../types/Task";
+import { prisma } from "../config/prismaClient";
 
 class TaskService{
-    tasks: Task[] = [];
-    
-    create(title: string): Task {
-        const task: Task = {
-            id: Math.floor(Math.random() * 1000000),
-            title,
-            completed: false,
-        };
-        this.tasks.push(task);
+    async create(title: string) {
+        const task = await prisma.task.create({
+            data:{
+                title,
+                completed: false,
+            },
+        });
         return task;
     }
 
-    findAll(completed?:string){
+    async findAll(completed?:string){
         if(completed === undefined){
-            return this.tasks;
+            return await prisma.task.findMany();
         }
         const isCompleted = completed === "true";
-        return this.tasks.filter(task => task.completed === isCompleted);
+        return await prisma.task.findMany({
+            where: {
+                completed: isCompleted,
+            },
+        });
     }
 
     findById(id: number): Task | undefined {

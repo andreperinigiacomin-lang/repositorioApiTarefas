@@ -2,9 +2,9 @@ import { Response, Request } from 'express';
 import TaskService from '../services/TaskService';
 
 class TaskController{
-    create(res:Response, req: Request): void{
+    async create(req: Request,res:Response): Promise<void>{
         const {title} = req.body;
-        const task = TaskService.create(title)
+        const task = await TaskService.create(title);
         res.status(201).json(task);
     }
 
