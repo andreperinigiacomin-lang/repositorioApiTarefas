@@ -1,9 +1,5 @@
-import express from "express";
-import taskRoutes from "./routes/taskRoutes";
+import {app} from './config/expressConfig';
 
-const app = express();
-app.use(express.json());
-app.use(taskRoutes);
 const PORT = 3000;
 
 app.listen(PORT, () =>{

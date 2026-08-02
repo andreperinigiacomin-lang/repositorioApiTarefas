@@ -1,50 +1,62 @@
-import { Task } from "../types/Task";
+import { prisma } from "../config/prismaClient";
 
 class TaskService{
-    tasks: Task[] = [];
-    
-    create(title: string): Task {
-        const task: Task = {
-            id: Math.floor(Math.random() * 1000000),
-            title,
-            completed: false,
-        };
-        this.tasks.push(task);
+    async create(title: string) {
+        const task = await prisma.task.create({
+            data:{
+                title,
+                completed: false,
+            },
+        });
         return task;
     }
 
-    findAll(completed?:string){
+    async findAll(completed?:string){
         if(completed === undefined){
-            return this.tasks;
+            return await prisma.task.findMany();
         }
         const isCompleted = completed === "true";
-        return this.tasks.filter(task => task.completed === isCompleted);
+        return await prisma.task.findMany({
+            where: {
+                completed: isCompleted,
+            },
+        });
     }
 
-    findById(id: number): Task | undefined {
-        return this.tasks.find(task => task.id === id);
+    async findById(id: number) {
+        return await prisma.task.findUnique({
+            where: {
+                id,
+            },
+        });
     }
 
-    update(id: number, title?: string, completed?: boolean): Task | undefined {
-        const task = this.findById(id);
+     async update(id: number, title?: string, completed?: boolean){
+        const task = await this.findById(id);
         if(!task){
-            return undefined;
+            return null;
         }
-        if(title !== undefined){
-            task.title = title;
-        }
-        if(completed !== undefined){
-            task.completed = completed;
-        }
-        return task;
+        return await prisma.task.update({
+            where: {
+                id,
+            },
+            data: {
+                ...(title !== undefined && {title}),
+                ...(completed !== undefined && {completed}),
+            },
+        });
     }
 
-    delete(id: number): boolean {
-        const index = this.tasks.findIndex(task => task.id === id);
-        if(index === -1){ //se nao acha, retorna -1
+    async delete(id: number): Promise<Boolean>{
+        const task = await this.findById(id);
+        if(!task){
             return false;
         }
-        this.tasks.splice(index, 1);
+        await prisma.task.delete({
+            where: {
+                id,
+            },
+        });
         return true;
     }
 }
